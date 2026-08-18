@@ -57,8 +57,9 @@ async def log_requests(request: Request, call_next):
 
 @app.on_event("startup")
 async def startup_event():
-    # Database initialization is now handled manually via the Render shell
-    # to prevent startup timeouts. See DEPLOY.md for instructions.
+    import asyncio
+    # Initialize DB tables in background to ensure they exist without blocking port binding
+    asyncio.create_task(init_db())
     
     if settings.STORAGE_BACKEND == "local":
         os.makedirs(settings.STORAGE_LOCAL_PATH, exist_ok=True)
