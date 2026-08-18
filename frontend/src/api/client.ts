@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// In production, use VITE_API_URL or default to the deployed Render backend.
-// In development, the Vite proxy forwards /api → localhost:8000.
-const rawApiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://nexus-rag-backend-2lh3.onrender.com' : '');
-export const API_BASE_URL = rawApiUrl
-  ? `${rawApiUrl.replace(/\/+$/, '')}/api`
-  : '/api';
+// Always use /api — in development, Vite proxies to localhost:8000.
+// In production, Vercel proxies /api/* → https://nexus-rag-backend-2lh3.onrender.com/api/*
+// This means the browser NEVER talks to Render directly, so there's zero CORS.
+export const API_BASE_URL = '/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

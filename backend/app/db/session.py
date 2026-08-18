@@ -40,6 +40,13 @@ async_session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def init_db():
-    async with engine.begin() as conn:
-        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            try:
+                await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+            except Exception as e:
+                print(f"[init_db] Could not create vector extension (may already exist): {e}")
+            await conn.run_sync(Base.metadata.create_all)
+            print("[init_db] Database tables initialized successfully.")
+    except Exception as e:
+        print(f"[init_db] Database initialization failed (will retry on next request): {e}")
