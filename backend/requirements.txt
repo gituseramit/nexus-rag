@@ -11,7 +11,6 @@ python-multipart==0.0.12
 aiofiles==24.1.0
 celery==5.4.0
 redis==5.1.1
-combu==5.4.1
 langchain==0.3.7
 langchain-openai==0.2.9
 langchain-community==0.3.7
