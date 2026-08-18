@@ -1,0 +1,93 @@
+# =============================================================
+# Render Blueprint — Nexus RAG (Free Tier)
+# =============================================================
+# Drop this file at the ROOT of your repo. Render auto-detects it.
+# Go to https://dashboard.render.com/blueprints and click "New Blueprint"
+
+services:
+  # ─── FastAPI Backend ────────────────────────────────────────
+  - type: web
+    name: nexus-rag-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+
+    envVars:
+      # ── Database (paste your Neon.tech connection string here) ──
+      - key: DATABASE_URL
+        sync: false           # you fill this in the Render dashboard
+
+      # ── Redis (paste your Upstash REDIS_URL here) ─────────────
+      - key: REDIS_URL
+        sync: false
+
+      # ── Auth ──────────────────────────────────────────────────
+      - key: JWT_SECRET
+        generateValue: true   # Render auto-generates a secure random value
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRE_MINUTES
+        value: "1440"
+
+      # ── OpenAI ────────────────────────────────────────────────
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        value: gpt-4o
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-small
+
+      # ── Optional Cohere Reranking ─────────────────────────────
+      - key: COHERE_API_KEY
+        sync: false
+
+      # ── Storage (local on Render's ephemeral disk) ────────────
+      - key: STORAGE_BACKEND
+        value: local
+      - key: STORAGE_LOCAL_PATH
+        value: /app/uploads
+      - key: MAX_UPLOAD_SIZE_MB
+        value: "50"
+
+      # ── CORS — add your Vercel URL after deploying frontend ───
+      # Example: ["https://nexus-rag.vercel.app","http://localhost:5173"]
+      - key: CORS_ORIGINS
+        sync: false
+
+      # ── RAG Settings ──────────────────────────────────────────
+      - key: TOP_K_RETRIEVAL
+        value: "5"
+      - key: CHUNK_SIZE
+        value: "1000"
+      - key: CHUNK_OVERLAP
+        value: "200"
+
+  # ─── Celery Background Worker ───────────────────────────────
+  - type: worker
+    name: nexus-rag-worker
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+
+    # Override the CMD to run Celery instead of Uvicorn
+    dockerCommand: celery -A app.workers.celery_app worker --loglevel=info -Q ingestion --concurrency=1
+
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: STORAGE_BACKEND
+        value: local
+      - key: STORAGE_LOCAL_PATH
+        value: /app/uploads
+      - key: COHERE_API_KEY
+        sync: false

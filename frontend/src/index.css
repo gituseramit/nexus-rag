@@ -1,0 +1,242 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* ===================== STITCH DESIGN TOKENS ===================== */
+@theme {
+  /* Colors - exact Stitch palette */
+  --color-surface: #0b1326;
+  --color-surface-dim: #0b1326;
+  --color-surface-bright: #31394d;
+  --color-surface-container-lowest: #060e20;
+  --color-surface-container-low: #131b2e;
+  --color-surface-container: #171f33;
+  --color-surface-container-high: #222a3d;
+  --color-surface-container-highest: #2d3449;
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #c2c6d6;
+  --color-inverse-surface: #dae2fd;
+  --color-inverse-on-surface: #283044;
+  --color-outline: #8c909f;
+  --color-outline-variant: #424754;
+  --color-surface-tint: #adc6ff;
+  --color-primary: #adc6ff;
+  --color-on-primary: #002e6a;
+  --color-primary-container: #4d8eff;
+  --color-on-primary-container: #00285d;
+  --color-inverse-primary: #005ac2;
+  --color-primary-fixed: #d8e2ff;
+  --color-primary-fixed-dim: #adc6ff;
+  --color-on-primary-fixed: #001a42;
+  --color-on-primary-fixed-variant: #004395;
+  --color-secondary: #c0c1ff;
+  --color-on-secondary: #1000a9;
+  --color-secondary-container: #3131c0;
+  --color-on-secondary-container: #b0b2ff;
+  --color-secondary-fixed: #e1e0ff;
+  --color-secondary-fixed-dim: #c0c1ff;
+  --color-on-secondary-fixed: #07006c;
+  --color-on-secondary-fixed-variant: #2f2ebe;
+  --color-tertiary: #89ceff;
+  --color-on-tertiary: #00344d;
+  --color-tertiary-container: #009ada;
+  --color-on-tertiary-container: #002d43;
+  --color-tertiary-fixed: #c9e6ff;
+  --color-tertiary-fixed-dim: #89ceff;
+  --color-on-tertiary-fixed: #001e2f;
+  --color-on-tertiary-fixed-variant: #004c6e;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-background: #0b1326;
+  --color-on-background: #dae2fd;
+  --color-surface-variant: #2d3449;
+
+  /* Spacing - Stitch 4px grid */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-2xl: 64px;
+  --spacing-gutter: 24px;
+  --spacing-margin: 32px;
+  --spacing-base: 4px;
+
+  /* Border radius */
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  /* Font families */
+  --font-family-display: 'Geist', sans-serif;
+  --font-family-headline-lg: 'Geist', sans-serif;
+  --font-family-headline-md: 'Geist', sans-serif;
+  --font-family-headline-sm: 'Geist', sans-serif;
+  --font-family-headline-lg-mobile: 'Geist', sans-serif;
+  --font-family-label-md: 'Geist', sans-serif;
+  --font-family-code: 'Geist', monospace;
+  --font-family-body-lg: 'Inter', sans-serif;
+  --font-family-body-md: 'Inter', sans-serif;
+  --font-family-body-sm: 'Inter', sans-serif;
+}
+
+/* ===================== BASE STYLES ===================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0b1326;
+  color: #dae2fd;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===================== GLASSMORPHIC UTILITY ===================== */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.surface-1 {
+  background-color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sophisticated-border {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #424754; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background-color: #8c909f; }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes typing-cursor {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: #adc6ff; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+/* ===================== STREAMING TEXT ===================== */
+.streaming-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #adc6ff;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: typing-cursor 0.75s step-end infinite;
+}
+
+/* ===================== CITATION TAGS ===================== */
+.citation-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(137, 206, 255, 0.1);
+  border: 1px solid rgba(137, 206, 255, 0.3);
+  color: #89ceff;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-family: 'Geist', monospace;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+}
+.citation-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(137, 206, 255, 0.4);
+  background: rgba(137, 206, 255, 0.2);
+}
+
+/* ===================== CUSTOM CHECKBOX ===================== */
+.custom-checkbox {
+  appearance: none;
+  background-color: transparent;
+  width: 1.1em;
+  height: 1.1em;
+  border: 1px solid #424754;
+  border-radius: 3px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.custom-checkbox::before {
+  content: "";
+  width: 0.6em;
+  height: 0.6em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #adc6ff;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.custom-checkbox:checked::before { transform: scale(1); }
+.custom-checkbox:checked { border-color: #adc6ff; }
+
+/* ===================== MATERIAL SYMBOLS ===================== */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===================== DROP ZONE ===================== */
+.dropzone-active {
+  border-color: #adc6ff !important;
+  background: rgba(173, 198, 255, 0.05);
+}

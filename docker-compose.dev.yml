@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: nexus_postgres_dev
+    environment:
+      POSTGRES_DB: nexus_rag
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexus}
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: nexus_redis_dev
+    ports:
+      - "6379:6379"
+
+  # In dev mode, we usually run frontend and backend locally via npm and uvicorn,
+  # so we only need the databases and maybe the worker.
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexus_worker_dev
+    command: celery -A app.workers.celery_app worker --loglevel=info -Q ingestion
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus:${POSTGRES_PASSWORD:-nexus}@postgres:5432/nexus_rag
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-text-embedding-3-small}
+      - STORAGE_BACKEND=${STORAGE_BACKEND:-local}
+      - STORAGE_LOCAL_PATH=/app/uploads
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      - postgres
+      - redis
