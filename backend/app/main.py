@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 import redis.asyncio as redis
 
 from app.core.config import settings
-from app.db.session import init_db
+from app.db.session import init_db, async_session_factory
 from app.api.auth import router as auth_router
 from app.api.documents import router as documents_router
 from app.api.chat import router as chat_router
