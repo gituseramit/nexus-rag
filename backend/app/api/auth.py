@@ -12,6 +12,14 @@ from app.core.deps import get_db, get_current_user
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
+@router.get("/register")
+async def register_info():
+    return {
+        "message": "Auth Registration Endpoint",
+        "method_required": "POST",
+        "description": "Send a POST request with JSON { email, password, full_name } to register."
+    }
+
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 async def register(request: RegisterRequest, db: AsyncSession = Depends(get_db)) -> Any:
     # Check if email exists
