@@ -16,10 +16,11 @@ export default function Register() {
     setError('');
     setLoading(true);
     try {
-      await register(name, email, password);
+      await register(email, password, name);
       navigate('/');
-    } catch (err) {
-      setError('Failed to register. Please try again.');
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || 'Failed to register. Please try again.';
+      setError(typeof msg === 'string' ? msg : 'Validation error. Please check your inputs.');
     } finally {
       setLoading(false);
     }
