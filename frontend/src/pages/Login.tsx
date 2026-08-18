@@ -10,7 +10,7 @@ export default function Login() {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -47,7 +47,10 @@ export default function Login() {
           
           <div className="mt-auto mb-20 max-w-lg">
             <h2 className="text-4xl font-geist font-bold mb-6 leading-tight">
-              Intelligent Document Retrieval at <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#adc6ff] to-[#8b5cf6]">Enterprise Scale</span>
+              Intelligent Document Retrieval at{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#adc6ff] to-[#8b5cf6]">
+                Enterprise Scale
+              </span>
             </h2>
             <p className="text-[#c2c6d6] text-lg leading-relaxed mb-8">
               Upload your internal knowledge base and instantly get accurate, AI-generated answers backed by precise source citations.
@@ -90,10 +93,15 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-[#dae2fd] mb-2">Email address</label>
+              <label htmlFor="email" className="block text-sm font-semibold text-[#dae2fd] mb-2">
+                Email address
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">mail</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">
+                  mail
+                </span>
                 <input
+                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -105,10 +113,15 @@ export default function Login() {
             </div>
             
             <div>
-              <label className="block text-sm font-semibold text-[#dae2fd] mb-2">Password</label>
+              <label htmlFor="password" className="block text-sm font-semibold text-[#dae2fd] mb-2">
+                Password
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">lock</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">
+                  lock
+                </span>
                 <input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -129,13 +142,18 @@ export default function Login() {
                   <span className="w-5 h-5 rounded-full border-2 border-[#0b1326]/30 border-t-[#0b1326] animate-spin" />
                   Authenticating...
                 </span>
-              ) : 'Sign In'}
+              ) : (
+                'Sign In'
+              )}
             </button>
           </form>
 
           <p className="mt-8 text-center text-[#8e919f]">
             Don't have an account?{' '}
-            <Link to="/register" className="text-[#adc6ff] hover:text-[#89ceff] hover:underline font-bold transition-colors">
+            <Link
+              to="/register"
+              className="text-[#adc6ff] hover:text-[#89ceff] hover:underline font-bold transition-colors"
+            >
               Create workspace
             </Link>
           </p>

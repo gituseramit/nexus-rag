@@ -11,7 +11,7 @@ export default function Register() {
   const register = useAuthStore((state) => state.register);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -19,7 +19,7 @@ export default function Register() {
       await register(name, email, password);
       navigate('/');
     } catch (err) {
-      setError('Failed to register');
+      setError('Failed to register. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -48,12 +48,15 @@ export default function Register() {
           
           <div className="mt-auto mb-20 max-w-lg">
             <h2 className="text-4xl font-geist font-bold mb-6 leading-tight">
-              Start building with <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#adc6ff] to-[#8b5cf6]">Enterprise RAG</span>
+              Start building with{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#adc6ff] to-[#8b5cf6]">
+                Enterprise RAG
+              </span>
             </h2>
             <p className="text-[#c2c6d6] text-lg leading-relaxed mb-8">
               Index documents, set up hybrid vector search, and query your knowledge base in seconds with zero configuration.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <div className="flex items-center gap-2 bg-[#1a2133]/60 backdrop-blur border border-white/5 px-4 py-2 rounded-lg text-sm text-[#8e919f]">
                 <span className="material-symbols-outlined text-[#adc6ff] text-[18px]">verified_user</span>
                 SOC2 Compliant Ready
@@ -68,16 +71,16 @@ export default function Register() {
       </div>
 
       {/* RIGHT SIDE - Register Form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12 relative overflow-y-auto">
-        <div className="w-full max-w-md py-6">
-          <div className="lg:hidden flex flex-col items-center mb-8">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12 relative">
+        <div className="w-full max-w-md">
+          <div className="lg:hidden flex flex-col items-center mb-10">
             <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#adc6ff] to-[#89ceff] flex items-center justify-center border-2 border-[#0b1326] shadow-[0_0_20px_rgba(173,198,255,0.3)] mb-4">
               <span className="material-symbols-outlined text-[#0b1326] text-3xl">hub</span>
             </div>
             <h1 className="text-2xl font-bold font-geist">Nexus RAG</h1>
           </div>
 
-          <div className="mb-8 text-center lg:text-left">
+          <div className="mb-10 text-center lg:text-left">
             <h2 className="text-3xl font-bold font-geist mb-2">Create an account</h2>
             <p className="text-[#8e919f]">Get started with your intelligent RAG workspace.</p>
           </div>
@@ -89,47 +92,62 @@ export default function Register() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-[#dae2fd] mb-2">Full Name</label>
+              <label htmlFor="name" className="block text-sm font-semibold text-[#dae2fd] mb-2">
+                Full Name
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">person</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">
+                  person
+                </span>
                 <input
+                  id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Alex Mercer"
-                  className="w-full bg-[#131b2e] border border-[#424754] rounded-xl pl-11 pr-4 py-3 text-[#dae2fd] placeholder-[#8e919f] focus:outline-none focus:border-[#adc6ff] focus:ring-1 focus:ring-[#adc6ff] transition-all"
+                  className="w-full bg-[#131b2e] border border-[#424754] rounded-xl pl-11 pr-4 py-3.5 text-[#dae2fd] placeholder-[#8e919f] focus:outline-none focus:border-[#adc6ff] focus:ring-1 focus:ring-[#adc6ff] transition-all"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#dae2fd] mb-2">Email address</label>
+              <label htmlFor="email" className="block text-sm font-semibold text-[#dae2fd] mb-2">
+                Email address
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">mail</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">
+                  mail
+                </span>
                 <input
+                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="alex@nexus.io"
-                  className="w-full bg-[#131b2e] border border-[#424754] rounded-xl pl-11 pr-4 py-3 text-[#dae2fd] placeholder-[#8e919f] focus:outline-none focus:border-[#adc6ff] focus:ring-1 focus:ring-[#adc6ff] transition-all"
+                  className="w-full bg-[#131b2e] border border-[#424754] rounded-xl pl-11 pr-4 py-3.5 text-[#dae2fd] placeholder-[#8e919f] focus:outline-none focus:border-[#adc6ff] focus:ring-1 focus:ring-[#adc6ff] transition-all"
                   required
                 />
               </div>
             </div>
             
             <div>
-              <label className="block text-sm font-semibold text-[#dae2fd] mb-2">Password</label>
+              <label htmlFor="password" className="block text-sm font-semibold text-[#dae2fd] mb-2">
+                Password
+              </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">lock</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8e919f] text-[20px]">
+                  lock
+                </span>
                 <input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#131b2e] border border-[#424754] rounded-xl pl-11 pr-4 py-3 text-[#dae2fd] placeholder-[#8e919f] focus:outline-none focus:border-[#adc6ff] focus:ring-1 focus:ring-[#adc6ff] transition-all"
+                  className="w-full bg-[#131b2e] border border-[#424754] rounded-xl pl-11 pr-4 py-3.5 text-[#dae2fd] placeholder-[#8e919f] focus:outline-none focus:border-[#adc6ff] focus:ring-1 focus:ring-[#adc6ff] transition-all"
                   required
                 />
               </div>
@@ -138,20 +156,25 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#adc6ff] to-[#c0c1ff] text-[#0b1326] font-bold text-base mt-6 hover:shadow-[0_0_25px_rgba(173,198,255,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-[#adc6ff] to-[#c0c1ff] text-[#0b1326] font-bold text-lg mt-8 hover:shadow-[0_0_25px_rgba(173,198,255,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 rounded-full border-2 border-[#0b1326]/30 border-t-[#0b1326] animate-spin" />
                   Creating Account...
                 </span>
-              ) : 'Create Account'}
+              ) : (
+                'Create Account'
+              )}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-[#8e919f]">
+          <p className="mt-8 text-center text-[#8e919f]">
             Already have an account?{' '}
-            <Link to="/login" className="text-[#adc6ff] hover:text-[#89ceff] hover:underline font-bold transition-colors">
+            <Link
+              to="/login"
+              className="text-[#adc6ff] hover:text-[#89ceff] hover:underline font-bold transition-colors"
+            >
               Sign In
             </Link>
           </p>
