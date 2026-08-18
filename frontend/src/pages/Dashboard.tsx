@@ -74,7 +74,7 @@ export default function Dashboard() {
           iconBg="bg-[#89ceff]/10"
           iconColor="text-[#89ceff]"
           label="Total Questions"
-          value={formatNumber(summary?.total_queries || 0)}
+          value={formatNumber(summary?.total_questions || 0)}
           trend="2%" trendUp={false}
         />
         <MetricCard

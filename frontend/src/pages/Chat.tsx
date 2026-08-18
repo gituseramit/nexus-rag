@@ -93,24 +93,50 @@ export default function Chat() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6" ref={scrollRef}>
-          {messages.map((msg, i) => (
-            <div key={msg.id || i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] rounded-2xl p-4 relative group ${
-                msg.role === 'user' 
-                  ? 'bg-gradient-to-br from-[#adc6ff]/20 to-[#adc6ff]/10 border border-[#adc6ff]/20 text-[#dae2fd] rounded-tr-sm' 
-                  : 'bg-[#1a2133]/60 backdrop-blur-md border border-white/5 text-[#dae2fd] rounded-tl-sm shadow-lg'
-              }`}>
-                {msg.role === 'assistant' && (
-                  <div className="absolute -left-10 top-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#adc6ff] to-[#89ceff] flex items-center justify-center border-2 border-[#0b1326]">
-                    <span className="material-symbols-outlined text-[16px] text-[#0b1326]">smart_toy</span>
-                  </div>
-                )}
-                <div className="prose prose-invert prose-sm max-w-none font-inter text-sm leading-relaxed">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
-                </div>
+          {messages.length === 0 && !isStreaming ? (
+            <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto text-center animate-fade-in">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#adc6ff]/20 to-[#c0c1ff]/10 flex items-center justify-center border border-[#adc6ff]/20 mb-6 shadow-[0_0_30px_rgba(173,198,255,0.1)]">
+                <span className="material-symbols-outlined text-[32px] text-[#adc6ff]">forum</span>
+              </div>
+              <h2 className="text-2xl font-bold text-[#dae2fd] mb-3 font-geist">How can I help you today?</h2>
+              <p className="text-[#8e919f] mb-8">Ask a question about your documents, or pick a suggestion below to get started.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                {[
+                  "Summarize the latest document I uploaded",
+                  "What are the key takeaways from the Q3 report?",
+                  "Find references to 'machine learning' in my files",
+                  "Explain the architecture diagram in simple terms"
+                ].map((suggestion, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => { setInput(suggestion); handleSend(); }}
+                    className="p-4 rounded-xl border border-[#424754] bg-[#1a2133]/40 text-left hover:border-[#adc6ff]/50 hover:bg-[#adc6ff]/5 transition-all group"
+                  >
+                    <p className="text-[#c2c6d6] text-sm group-hover:text-[#dae2fd]">{suggestion}</p>
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
+          ) : (
+            messages.map((msg, i) => (
+              <div key={msg.id || i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[80%] rounded-2xl p-4 relative group ${
+                  msg.role === 'user' 
+                    ? 'bg-gradient-to-br from-[#adc6ff]/20 to-[#adc6ff]/10 border border-[#adc6ff]/20 text-[#dae2fd] rounded-tr-sm' 
+                    : 'bg-[#1a2133]/60 backdrop-blur-md border border-white/5 text-[#dae2fd] rounded-tl-sm shadow-lg'
+                }`}>
+                  {msg.role === 'assistant' && (
+                    <div className="absolute -left-10 top-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#adc6ff] to-[#89ceff] flex items-center justify-center border-2 border-[#0b1326]">
+                      <span className="material-symbols-outlined text-[16px] text-[#0b1326]">smart_toy</span>
+                    </div>
+                  )}
+                  <div className="prose prose-invert prose-sm max-w-none font-inter text-sm leading-relaxed">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
 
           {isStreaming && (
             <div className="flex justify-start">
