@@ -90,6 +90,32 @@ async def root():
 async def health_check():
     return {"status": "ok", "timestamp": datetime.now().isoformat()}
 
+@app.get("/api/init-db")
+async def trigger_init_db():
+    """Manually trigger database table creation. Safe to call multiple times."""
+    await init_db()
+    return {"status": "ok", "message": "Database initialization triggered. Check Render logs for result."}
+
+@app.post("/api/create-demo")
+async def create_demo_user():
+    """Create a demo user account. Returns existing token if already exists."""
+    from app.db.models import User
+    from app.core.security import hash_password, create_access_token
+    from sqlalchemy import select
+    email = "demo@nexusrag.io"
+    async with async_session_factory() as db:
+        result = await db.execute(select(User).where(User.email == email))
+        existing = result.scalar_one_or_none()
+        if existing:
+            token = create_access_token({"sub": str(existing.id)})
+            return {"status": "exists", "email": email, "access_token": token}
+        user = User(email=email, password_hash=hash_password("Demo@12345"), full_name="Demo User")
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+        token = create_access_token({"sub": str(user.id)})
+        return {"status": "created", "email": email, "access_token": token}
+
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=404, content={"error": "Not Found"})

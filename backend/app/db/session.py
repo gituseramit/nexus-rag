@@ -40,13 +40,18 @@ async_session_factory = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def init_db():
+    # Step 1: Try to create the pgvector extension in its own transaction
     try:
         async with engine.begin() as conn:
-            try:
-                await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-            except Exception as e:
-                print(f"[init_db] Could not create vector extension (may already exist): {e}")
-            await conn.run_sync(Base.metadata.create_all)
-            print("[init_db] Database tables initialized successfully.")
+            await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+            print("[init_db] pgvector extension ready.")
     except Exception as e:
-        print(f"[init_db] Database initialization failed (will retry on next request): {e}")
+        print(f"[init_db] pgvector extension skipped (non-fatal): {e}")
+
+    # Step 2: Create all tables in a fresh separate transaction
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+            print("[init_db] Database tables created/verified successfully.")
+    except Exception as e:
+        print(f"[init_db] Table creation failed: {e}")
