@@ -57,7 +57,9 @@ async def log_requests(request: Request, call_next):
 
 @app.on_event("startup")
 async def startup_event():
-    await init_db()
+    # Database initialization is now handled manually via the Render shell
+    # to prevent startup timeouts. See DEPLOY.md for instructions.
+    
     if settings.STORAGE_BACKEND == "local":
         os.makedirs(settings.STORAGE_LOCAL_PATH, exist_ok=True)
         # Mount only after the directory is guaranteed to exist
@@ -66,6 +68,7 @@ async def startup_event():
             StaticFiles(directory=settings.STORAGE_LOCAL_PATH),
             name="uploads",
         )
+
 
 
 app.include_router(auth_router)
