@@ -7,6 +7,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://nexus-rag-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
@@ -15,12 +19,6 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
-    }
-  ],
-  "routes": [
-    {
-      "src": "^/(?!api/).*",
-      "dest": "/index.html"
     }
   ]
 }
