@@ -47,9 +47,12 @@ async def log_requests(request: Request, call_next):
         "latency_ms": latency_ms
     }
     
-    await r.lpush("api_logs", json.dumps(log_entry))
-    await r.ltrim("api_logs", 0, 999)
-    
+    try:
+        await r.lpush("api_logs", json.dumps(log_entry))
+        await r.ltrim("api_logs", 0, 999)
+    except Exception:
+        pass # ignore redis errors in middleware
+
     return response
 
 @app.on_event("startup")
@@ -57,9 +60,13 @@ async def startup_event():
     await init_db()
     if settings.STORAGE_BACKEND == "local":
         os.makedirs(settings.STORAGE_LOCAL_PATH, exist_ok=True)
-        
-if settings.STORAGE_BACKEND == "local":
-    app.mount("/uploads", StaticFiles(directory=settings.STORAGE_LOCAL_PATH), name="uploads")
+        # Mount only after the directory is guaranteed to exist
+        app.mount(
+            "/uploads",
+            StaticFiles(directory=settings.STORAGE_LOCAL_PATH),
+            name="uploads",
+        )
+
 
 app.include_router(auth_router)
 app.include_router(documents_router)

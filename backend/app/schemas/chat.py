@@ -27,8 +27,9 @@ class MessageResponse(BaseModel):
     tokens_used: int | None = None
     model_used: str | None = None
     created_at: datetime
-    
-    model_config = ConfigDict(from_attributes=True)
+
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+
 
 class ConversationDetail(BaseModel):
     conversation: ConversationResponse
