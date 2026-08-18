@@ -76,6 +76,15 @@ app.include_router(documents_router)
 app.include_router(chat_router)
 app.include_router(analytics_router)
 
+@app.get("/")
+async def root():
+    return {
+        "name": "Nexus RAG API",
+        "status": "online",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
 @app.get("/health")
 async def health_check():
     return {"status": "ok", "timestamp": datetime.now().isoformat()}
