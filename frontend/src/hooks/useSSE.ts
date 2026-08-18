@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
+import { API_BASE_URL } from '../api/client';
 
 export function useDocumentSSE(
   docId: string | null,
@@ -8,7 +9,7 @@ export function useDocumentSSE(
   useEffect(() => {
     if (!docId) return;
     const token = localStorage.getItem('nexus_token');
-    const url = `/api/documents/${docId}/status${token ? `?token=${token}` : ''}`;
+    const url = `${API_BASE_URL}/documents/${docId}/status${token ? `?token=${token}` : ''}`;
     const es = new EventSource(url);
     esRef.current = es;
     es.onmessage = (e) => {
@@ -34,7 +35,7 @@ export function useStreamingChat() {
     abortRef.current = ctrl;
     const token = localStorage.getItem('nexus_token');
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch(`${API_BASE_URL}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify(requestBody),

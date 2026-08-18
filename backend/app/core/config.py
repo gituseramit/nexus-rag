@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     AWS_REGION: str = "us-east-1"
     MAX_UPLOAD_SIZE_MB: int = 50
     ALLOWED_FILE_EXTENSIONS: list[str] = ["pdf", "docx", "txt", "md", "csv"]
-    CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000"]
+    CORS_ORIGINS: list[str] = ["*"]
     TOP_K_RETRIEVAL: int = 5
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200

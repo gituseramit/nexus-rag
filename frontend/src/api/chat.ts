@@ -1,4 +1,4 @@
-import apiClient from './client';
+import apiClient, { API_BASE_URL } from './client';
 import type { Conversation, ConversationDetail, ChatRequest } from '../types';
 
 export const chatApi = {
@@ -29,10 +29,7 @@ export const chatApi = {
   // Returns a ReadableStream of SSE events
   chat: async (data: ChatRequest): Promise<Response> => {
     const token = localStorage.getItem('nexus_token');
-    const apiBase = import.meta.env.VITE_API_URL
-      ? `${import.meta.env.VITE_API_URL}/api`
-      : '/api';
-    return fetch(`${apiBase}/chat`, {
+    return fetch(`${API_BASE_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

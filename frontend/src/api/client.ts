@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-// In production (Vercel), VITE_API_URL points to the Render backend.
+// In production, use VITE_API_URL or default to the deployed Render backend.
 // In development, the Vite proxy forwards /api → localhost:8000.
-const BASE_URL = import.meta.env.VITE_API_URL
-  ? `${import.meta.env.VITE_API_URL}/api`
+const rawApiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://nexus-rag-backend-2lh3.onrender.com' : '');
+export const API_BASE_URL = rawApiUrl
+  ? `${rawApiUrl.replace(/\/+$/, '')}/api`
   : '/api';
 
 const apiClient = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
 });

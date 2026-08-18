@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://nexus-rag-backend.onrender.com/api/:path*"
+      "destination": "https://nexus-rag-backend-2lh3.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
