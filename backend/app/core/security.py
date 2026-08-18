@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Any, dict
+from typing import Any, Dict
 from jose import jwt, JWTError
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
