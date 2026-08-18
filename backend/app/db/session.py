@@ -6,32 +6,25 @@ from sqlalchemy import text
 
 def _build_engine():
     """
-    asyncpg does NOT accept `sslmode` or `ssl` as URL query params —
-    those must be passed as connect_args. This function strips any SSL
-    query parameters from the DATABASE_URL and re-injects SSL via
-    connect_args so the connection works with Neon, Supabase, etc.
+    asyncpg is very strict and will treat unknown query params (like 
+    channel_binding=require) as part of the database name, causing crashes.
+    We strip ALL query parameters from the URL string, and manually 
+    inject SSL context if 'ssl' or 'sslmode' was requested.
     """
     url: str = settings.DATABASE_URL
     connect_args: dict = {}
-
-    # Detect and strip SSL query params that asyncpg can't handle in the URL
-    ssl_required = False
-    for param in ("sslmode=require", "ssl=require", "sslmode=verify-full"):
-        if param in url:
-            ssl_required = True
-            # Remove the param cleanly, handling both ?param and &param forms
-            url = url.replace(f"?{param}", "").replace(f"&{param}", "")
-
-    if ssl_required:
+    
+    # Check if SSL was requested anywhere in the URL string
+    if "sslmode=require" in url or "ssl=require" in url or "sslmode=verify-full" in url:
         import ssl as _ssl
         ctx = _ssl.create_default_context()
         ctx.check_hostname = False
         ctx.verify_mode = _ssl.CERT_NONE
         connect_args["ssl"] = ctx
 
-    # Clean up any trailing ? left after stripping
-    if url.endswith("?"):
-        url = url[:-1]
+    # Completely strip query parameters (everything after '?')
+    if "?" in url:
+        url = url.split("?")[0]
 
     return create_async_engine(
         url,
