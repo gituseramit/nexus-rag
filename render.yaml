@@ -15,6 +15,9 @@ services:
     region: oregon
 
     envVars:
+      - key: PORT
+        value:"10000"
+
       # ── Database (paste your Neon.tech connection string here) ──
       - key: DATABASE_URL
         sync: false           # you fill this in the Render dashboard
